@@ -1,0 +1,13 @@
+#header-principal {
+    padding: 10px 20px;
+    background-color: #F8F9FA;
+    border-bottom: 1px solid #e9ecef;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#logo {
+    width: 5%;
+    height: 5%;
+    margin-right: 10px;
+}
