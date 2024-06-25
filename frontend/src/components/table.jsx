@@ -5,6 +5,7 @@ export default function Table() {
   const [employees, setEmployees] = useState([])
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -23,15 +24,16 @@ export default function Table() {
     fetchEmployees()
   }, [])
 
-  const allEmployees = employees.map(employee => ({
-    id: employee.id,
-    name: employee.name,
-    job: employee.job,
-    admission_date: employee.admission_date,
-    phone: employee.phone,
-    image: employee.image
-  }))
-  console.log(allEmployees)
+  const handleSearch = (e) => {
+    setSearch(e.target.value)
+  }
+
+  const filteredEmployees = employees.filter(employee =>
+    employee.name.toLowerCase().includes(search.toLowerCase()) ||
+    employee.job.toLowerCase().includes(search.toLowerCase()) ||
+    employee.phone.includes(search)
+  );
+  console.log(filteredEmployees)
 
   return (
     <main className="user-table">
@@ -39,7 +41,12 @@ export default function Table() {
         {loading ? '' : <p>Carregando...</p>}
         <div className="search-div">
           <h1>Funcionários</h1>
-          <input type="text" placeholder="Pesquisar" />
+          <input
+            type="text"
+            placeholder="Pesquisar"
+            value={search}
+            onChange={handleSearch}
+            />
         </div>
         <table>
           <thead>
@@ -52,7 +59,7 @@ export default function Table() {
             </tr>
           </thead>
           <tbody>
-            {allEmployees.map(employee => (
+            {filteredEmployees.map(employee => (
               <tr key={employee.id}>
                 <td>
                   <img src={employee.image} alt={employee.name} />
