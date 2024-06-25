@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import './table.css'
 
 export default function Table() {
   const [employees, setEmployees] = useState([])
@@ -33,33 +34,39 @@ export default function Table() {
   console.log(allEmployees)
 
   return (
-    <main>
-      {loading && <p>Carregando...</p>}
-      <table>
-        <thead>
-          <tr>
-            <th>Imagem</th>
-            <th>Nome</th>
-            <th>Cargo</th>
-            <th>Data de Admissão</th>
-            <th>telefone</th>
-          </tr>
-        </thead>
-        <tbody>
-          {allEmployees.map(employee => (
-            <tr key={employee.id}>
-              <td>
-                <img src={employee.image} alt={employee.name} />
-              </td>
-              <td>{employee.name}</td>
-              <td>{employee.job}</td>
-              <td>{employee.admission_date}</td>
-              <td>{employee.phone}</td>
+    <main className="user-table">
+      <>
+        {loading ? '' : <p>Carregando...</p>}
+        <div className="search-div">
+          <h1>Funcionários</h1>
+          <input type="text" placeholder="Pesquisar" />
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Imagem</th>
+              <th>Nome</th>
+              <th>Cargo</th>
+              <th>Data de Admissão</th>
+              <th>telefone</th>
             </tr>
-          ))}
-        </tbody>
-        {error && <p>Erro ao carregar os dados</p>}
-      </table>
+          </thead>
+          <tbody>
+            {allEmployees.map(employee => (
+              <tr key={employee.id}>
+                <td>
+                  <img src={employee.image} alt={employee.name} />
+                </td>
+                <td>{employee.name}</td>
+                <td>{employee.job}</td>
+                <td>{employee.admission_date}</td>
+                <td>{employee.phone}</td>
+              </tr>
+            ))}
+          </tbody>
+          {error && <p>Erro ao carregar os dados</p>}
+        </table>
+      </>
     </main>
   )
 }
