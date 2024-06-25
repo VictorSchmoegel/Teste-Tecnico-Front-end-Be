@@ -6,6 +6,7 @@ export default function Table() {
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
+  const [expanded, setExpanded] = useState(null)
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -27,6 +28,10 @@ export default function Table() {
   const handleSearch = (e) => {
     setSearch(e.target.value)
   }
+
+  const handleExpand = (index) => {
+    setExpanded(expanded === index ? null : index);
+  };
 
   const filteredEmployees = employees.filter(employee =>
     employee.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -59,16 +64,27 @@ export default function Table() {
             </tr>
           </thead>
           <tbody>
-            {filteredEmployees.map(employee => (
-              <tr key={employee.id}>
+            {filteredEmployees.map((employee, index) => (
+              <>
+              <tr key={employee.id} onClick={() => handleExpand(index)} className="employee-row">
                 <td>
                   <img src={employee.image} alt={employee.name} />
                 </td>
-                <td>{employee.name}</td>
+                <td>{employee.name}<p className="expand-btn">{expanded === index ? '▲' : '▼'}</p></td>
                 <td>{employee.job}</td>
                 <td>{employee.admission_date}</td>
                 <td>{employee.phone}</td>
               </tr>
+              {expanded === index && (
+                <tr className="employee-details">
+                  <td className="expanded">
+                    <div><span>Cargo:</span> {employee.job}</div>
+                    <div><span>Data de Admissão:</span> {employee.admission_date}</div>
+                    <div><span>Telefone:</span> {employee.phone}</div>
+                  </td>
+                </tr>
+              )}
+              </>
             ))}
           </tbody>
           {error && <p>Erro ao carregar os dados</p>}

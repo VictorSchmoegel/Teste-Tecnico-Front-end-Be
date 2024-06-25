@@ -30,7 +30,6 @@ body {
 .user-table thead tr{
   background: linear-gradient(90deg, #5A84C0, #594ED2);
   color: white;
-  border-radius: 30px;
 }
 
 .user-table tbody tr:nth-child(even) {
@@ -72,4 +71,50 @@ body {
   width: 300px;
   border: 1px solid #ddd;
   border-radius: 5px;
+}
+
+.expand-btn {
+  display: none;
+}
+
+.expanded {
+  display: none;
+}
+
+.employee-row {
+  border-bottom: 1px solid #ddd;
+}
+
+@media (max-width: 700px) {
+  .expand-btn {
+    display: inline-block;
+  }
+
+  table th:nth-child(3),
+  table th:nth-child(5),
+  table th:nth-child(4) {
+    display: none;
+  
+  }
+
+  table td:nth-child(3),
+  table td:nth-child(5),
+  table td:nth-child(4) {
+    display: none;
+  }
+  
+  .employee-row{
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .user-table thead tr{
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .expanded {
+    display: flex;
+  }
+  
 }
