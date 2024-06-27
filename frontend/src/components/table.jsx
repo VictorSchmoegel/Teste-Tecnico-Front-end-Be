@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react"
+import { IoIosSearch } from "react-icons/io";
+import { FaCircle } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
+import { FaChevronUp } from "react-icons/fa";
 import './table.css'
 
 export default function Table() {
@@ -33,12 +37,34 @@ export default function Table() {
     setExpanded(expanded === index ? null : index);
   };
 
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('pt-BR');
+  };
+
+  const formatPhone = (phone) => {
+    const cleaned = ('' + phone).replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{2})(\d{2})(\d{5})(\d{4})$/);
+    if (match) {
+      return `+${match[1]} (${match[2]}) ${match[3]}-${match[4]}`;
+    }
+    return phone;
+  };
+
   const filteredEmployees = employees.filter(employee =>
     employee.name.toLowerCase().includes(search.toLowerCase()) ||
     employee.job.toLowerCase().includes(search.toLowerCase()) ||
     employee.phone.includes(search)
   );
-  console.log(filteredEmployees)
+  
+  const sortedEmployees = filteredEmployees.sort((a, b) => {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  })
 
   return (
     <main className="user-table">
@@ -46,12 +72,18 @@ export default function Table() {
         {loading ? '' : <p>Carregando...</p>}
         <div className="search-div">
           <h1>Funcionários</h1>
-          <input
-            type="text"
-            placeholder="Pesquisar"
-            value={search}
-            onChange={handleSearch}
+          <div className="search-div-container">
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Pesquisar"
+              value={search}
+              onChange={handleSearch}
             />
+            <span className="search-icon">
+              <IoIosSearch />
+            </span>
+          </div>
         </div>
         <table>
           <thead>
@@ -61,26 +93,28 @@ export default function Table() {
               <th>Cargo</th>
               <th>Data de Admissão</th>
               <th>telefone</th>
+              <th id="circle-icon"><FaCircle /></th>
             </tr>
           </thead>
           <tbody>
-            {filteredEmployees.map((employee, index) => (
+            {sortedEmployees.map((employee, index) => (
               <>
               <tr key={employee.id} onClick={() => handleExpand(index)} className="employee-row">
                 <td>
                   <img src={employee.image} alt={employee.name} />
                 </td>
-                <td>{employee.name}<p className="expand-btn">{expanded === index ? '▲' : '▼'}</p></td>
+                <td>{employee.name}</td>
                 <td>{employee.job}</td>
-                <td>{employee.admission_date}</td>
-                <td>{employee.phone}</td>
+                <td>{formatDate(employee.admission_date)}</td>
+                <td>{formatPhone(employee.phone)}</td>
+                <td className="expand-btn">{expanded === index ? <FaChevronUp /> : <FaChevronDown />}</td>
               </tr>
               {expanded === index && (
                 <tr className="employee-details">
                   <td className="expanded">
                     <div><span>Cargo:</span> {employee.job}</div>
-                    <div><span>Data de Admissão:</span> {employee.admission_date}</div>
-                    <div><span>Telefone:</span> {employee.phone}</div>
+                    <div><span>Data de Admissão:</span> {formatDate(employee.admission_date)}</div>
+                    <div><span>Telefone:</span> {formatPhone(employee.phone)}</div>
                   </td>
                 </tr>
               )}
