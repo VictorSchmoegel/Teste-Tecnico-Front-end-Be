@@ -128,13 +128,6 @@ body {
   #circle-icon {
     font-size: 12px;
   }
-  
-}
-
-@media (max-width: 550px) {
-  .user-table h1 {
-    display: none;
-  }
 
   .search-div {
     display: block;
@@ -144,4 +137,5 @@ body {
   .search-div-container {
     justify-content: space-between;
   }
+  
 }
