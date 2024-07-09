@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
 import { IoIosSearch } from "react-icons/io";
-import { FaCircle } from "react-icons/fa";
-import { FaChevronDown } from "react-icons/fa";
-import { FaChevronUp } from "react-icons/fa";
+import { FaCircle, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { normalizeString } from "../utils/normalize";
 import './table.css'
 
 export default function Table() {
@@ -50,19 +49,17 @@ export default function Table() {
     return phone;
   };
 
+  const normalizedSearch = normalizeString(search);
+
   const filteredEmployees = employees.filter(employee =>
-    employee.name.toLowerCase().includes(search.toLowerCase()) ||
-    employee.job.toLowerCase().includes(search.toLowerCase()) ||
+    normalizeString(employee.name).includes(normalizedSearch) ||
+    normalizeString(employee.job).includes(normalizedSearch) ||
     employee.phone.includes(search)
   );
   
   const sortedEmployees = filteredEmployees.sort((a, b) => {
-    if (a.name < b.name) {
-      return -1;
-    }
-    if (a.name > b.name) {
-      return 1;
-    }
+    if (a.name < b.name) return -1;
+    if (a.name > b.name) return 1;
     return 0;
   })
 
