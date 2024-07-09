@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { IoIosSearch } from "react-icons/io";
 import { FaCircle, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { normalizeString } from "../utils/normalize";
+import { fetchEmployees } from "../services/employeeService";
 import './table.css'
 
 export default function Table() {
@@ -12,20 +13,19 @@ export default function Table() {
   const [expanded, setExpanded] = useState(null)
 
   useEffect(() => {
-    const fetchEmployees = async () => {
-      setLoading(true)
-      setError(false)
+    const getEmployees = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const res = await fetch('http://localhost:3000/employees')
-        const data = await res.json()
-        setEmployees(data)
-        console.log(data)
+        const data = await fetchEmployees();
+        setEmployees(data);
       } catch (error) {
-        setError(true)
-        console.error(error)
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchEmployees()
+    getEmployees();
   }, [])
 
   const handleSearch = (e) => {
@@ -82,6 +82,7 @@ export default function Table() {
             </span>
           </div>
         </div>
+        {error && <p className="error-message">{error}</p>}
         <table>
           <thead>
             <tr>
